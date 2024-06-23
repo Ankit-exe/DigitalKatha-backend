@@ -48,15 +48,18 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
         if (!updatedUser) {
             return res.status(404).send("User not found");
         }
-
-        const { password, ...rest } = updatedUser.toObject();
-        res.status(200).json(rest);
+        const { password, _id, ...rest } = updatedUser.toObject();
+        const userWithUserId = { userId: _id, ...rest };
+        console.log(userWithUserId)
+        res.status(200).json(userWithUserId);
     } catch (error) {
         next(error);
     }
 };
 
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.userId)
+    console.log(req.params.userId)
     if (req.userId !== req.params.userId) {
         return next(res.status(403).send({ message: "You are not allowed to delete the user" }))
     }
