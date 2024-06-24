@@ -50,7 +50,6 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
         }
         const { password, _id, ...rest } = updatedUser.toObject();
         const userWithUserId = { userId: _id, ...rest };
-        console.log(userWithUserId)
         res.status(200).json(userWithUserId);
     } catch (error) {
         next(error);
