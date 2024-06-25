@@ -1,10 +1,11 @@
 
 import express from 'express'
 import { verifyToken } from '../middleware/verifyUser'
-import { Create } from '../controllers/post.controller'
+import { Create, getPosts } from '../controllers/post.controller'
 
 const router = express.Router()
 
 router.post('/create', verifyToken, Create)
+router.get('/getPosts', getPosts)
 
 export default router;
