@@ -50,13 +50,15 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
         const posts = await Post.find(query)
             .sort({ updatedAt: sortDirection })
             .skip(startIndex)
-            .limit(limit)
+            .limit(limit) 
+            .select({ _id: 0 });
 
+        const totalPosts = await Post.countDocuments();
         const now = new Date();
 
         const oneMonthAgo = new Date(
             now.getFullYear(),
-            now.getMonth() -1,
+            now.getMonth() - 1,
             now.getDate()
         );
 
@@ -66,6 +68,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 
         res.status(200).json({
             posts,
+            totalPosts,
             lastMonthPosts
         })
 
