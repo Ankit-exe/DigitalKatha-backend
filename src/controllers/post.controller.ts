@@ -50,8 +50,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
         const posts = await Post.find(query)
             .sort({ updatedAt: sortDirection })
             .skip(startIndex)
-            .limit(limit) 
-            .select({ _id: 0 });
+            .limit(limit)
 
         const totalPosts = await Post.countDocuments();
         const now = new Date();
@@ -76,4 +75,16 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
         next(error)
     }
 
+}
+
+export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+    if (req.userId !== req.params.userId) {
+        return next(res.status(403).send("You are not allowed to delete the post"))
+    }
+    try {
+        await Post.findByIdAndDelete(req.params.postId);
+        res.status(200).json("The post has been deleted")
+    } catch (error) {
+        next(error)
+    }
 }
