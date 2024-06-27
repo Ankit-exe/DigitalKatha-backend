@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/auth.route";
 import userRoutes from './routes/user.route';
 import postRoutes from './routes/post.route';
+import commentRoutes from './routes/comment.route';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -28,7 +29,8 @@ mongoose.connect(process.env.MONGO_DB as string)
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/post", postRoutes)
+app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 
 app.listen(7000, () => {
     console.log("SERVER STARTED ON 7000");
