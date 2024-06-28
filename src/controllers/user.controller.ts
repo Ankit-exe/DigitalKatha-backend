@@ -3,6 +3,16 @@ import User from '../models/user.model';
 import { Request, Response, NextFunction } from 'express';
 
 
+interface UserDoc {
+    _id: string;
+    username: string;
+    email: string;
+    password: string;
+    profilePicture?: string;
+    [key: string]: any;
+}
+
+interface UserModel extends Document, UserDoc { }
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
     if (req.userId !== req.params.userId) {
@@ -71,6 +81,20 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 export const signOut = async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.clearCookie('access_token').status(200).json("User has been signed out")
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await User.findById(req.params.userId) as UserModel | null;
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+        const { password, ...rest } = user._doc;
+        res.status(200).json(rest)
+
     } catch (error) {
         next(error)
     }
