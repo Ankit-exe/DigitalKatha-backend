@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 import Comment from "../models/comment.model";
 
 
@@ -69,6 +69,24 @@ export const editComment = async (req: Request, res: Response, next: NextFunctio
         }, { new: true }
         );
         res.status(200).json(editedComment)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const comment = await Comment.findById(req.params.commentId);
+        if (!comment) {
+            return next(res.status(404).send("Comment not found"));
+        }
+        if (comment.userId !== req.userId) {
+            return next(res.status(403).send("You are not allowed to edit this comment"))
+        }
+
+        await Comment.findByIdAndDelete(req.params.commentId);
+        res.status(200).json("Comment has been deleted")
+
     } catch (error) {
         next(error)
     }
