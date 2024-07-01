@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import Post from "../models/post.model";
+import Comment from "../models/comment.model";
 
 
 export const Create = async (req: Request, res: Response, next: NextFunction) => {
@@ -112,3 +113,36 @@ export const updatePost = async (req: Request, res: Response, next: NextFunction
     }
 
 }
+
+
+export const getPostComments = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const [mostLikedComment] = await Comment.aggregate([
+            {
+                $group: {
+                    _id: "$postId",
+                    totalLikes: { $sum: "$numberOfLikes" }
+                }
+            },
+            {
+                $sort: { totalLikes: -1 }
+            },
+            {
+                $limit: 1
+            }
+        ]);
+
+        const postId = mostLikedComment._id;
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+        res.status(200).json({
+            post,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
