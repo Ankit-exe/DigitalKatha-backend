@@ -74,6 +74,7 @@ export const google = async (req: Request, res: Response, next: NextFunction) =>
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
+                sameSite: 'none',
                 maxAge: 86400000,
             }).json({
                 username: user.username,
