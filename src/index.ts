@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Response, Request } from "express";
 import cors from "cors";
 import "dotenv/config";
 import mongoose from "mongoose";
@@ -33,6 +33,10 @@ app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/contact", conatctRoutes);
+
+app.get("/health", async (req: Request, res: Response) => {
+    res.send({ message: "health ok!" })
+})
 
 app.listen(7000, () => {
     console.log("SERVER STARTED ON 7000");
