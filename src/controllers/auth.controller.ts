@@ -44,11 +44,13 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
             { expiresIn: '1d' }
         );
 
+        console.log(token)
+
         res.status(200).cookie('access_token', token, {
             httpOnly: true,
             secure: true,
             maxAge: 86400000,
-            sameSite: 'none'
+            sameSite: 'none' as 'none',
         }).json({ username: user.username, email: user.email, userId: user._id, profilePicture: user.profilePicture });
     } catch (error) {
         next(error);
@@ -74,7 +76,7 @@ export const google = async (req: Request, res: Response, next: NextFunction) =>
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'none',
+                sameSite: 'none' as 'none',
                 maxAge: 86400000,
             }).json({
                 username: user.username,
@@ -104,7 +106,7 @@ export const google = async (req: Request, res: Response, next: NextFunction) =>
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'none',
+                sameSite: 'none' as 'none',
                 maxAge: 86400000,
             }).json({
                 username: newUser.username,
