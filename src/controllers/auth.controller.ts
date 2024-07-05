@@ -48,7 +48,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             maxAge: 86400000,
-            sameSite: process.env.NODE_ENV === "production" ? 'strict' : 'lax'
+            sameSite: 'none'
         }).json({ username: user.username, email: user.email, userId: user._id, profilePicture: user.profilePicture });
     } catch (error) {
         next(error);
@@ -74,7 +74,7 @@ export const google = async (req: Request, res: Response, next: NextFunction) =>
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: 'strict',
+                sameSite: 'none',
                 maxAge: 86400000,
             }).json({
                 username: user.username,
@@ -104,6 +104,7 @@ export const google = async (req: Request, res: Response, next: NextFunction) =>
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
+                sameSite: 'none',
                 maxAge: 86400000,
             }).json({
                 username: newUser.username,
