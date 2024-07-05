@@ -44,8 +44,6 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
             { expiresIn: '1d' }
         );
 
-        console.log(token)
-
         res.status(200).cookie('access_token', token, {
             httpOnly: true,
             secure: true,
